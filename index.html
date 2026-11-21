@@ -536,7 +536,22 @@ $('btnExcel').onclick=()=>{
 </script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    setDoc,
+    deleteDoc
+  } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBPtOOXqgdCZmdRPM9lysQv9Jw5PyMDlJs",
@@ -548,7 +563,34 @@ $('btnExcel').onclick=()=>{
   };
 
   const app = initializeApp(firebaseConfig);
-  window.firebaseDb = getFirestore(app);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  window.firebaseDb = db;
+
+  window.firebaseServices = {
+    auth,
+    db,
+
+    signIn: (email, password) =>
+      signInWithEmailAndPassword(auth, email, password),
+
+    onAuthChanged: (callback) =>
+      onAuthStateChanged(auth, callback),
+
+    signOut: () => signOut(auth),
+
+    getRecords: async () => {
+      const snapshot = await getDocs(collection(db, "defect_records"));
+      return snapshot.docs.map(d => d.data());
+    },
+
+    saveRecord: (record) =>
+      setDoc(doc(db, "defect_records", record.id), record),
+
+    deleteRecord: (id) =>
+      deleteDoc(doc(db, "defect_records", id))
+  };
 
   console.log("Firebase connected successfully!");
 </script>
