@@ -534,5 +534,23 @@ $('btnExcel').onclick=()=>{
   }
 })();
 </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBPtOOXqgdCZmdRPM9lysQv9Jw5PyMDlJs",
+    authDomain: "moulding-defect-2027.firebaseapp.com",
+    projectId: "moulding-defect-2027",
+    storageBucket: "moulding-defect-2027.firebasestorage.app",
+    messagingSenderId: "555048115594",
+    appId: "1:555048115594:web:ccabd77d6b0b5226897c73"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  window.firebaseDb = getFirestore(app);
+
+  console.log("Firebase connected successfully!");
+</script>
 </body>
 </html>
